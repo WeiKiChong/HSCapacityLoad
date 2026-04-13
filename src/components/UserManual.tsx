@@ -21,13 +21,14 @@ import { cn } from '../utils';
 interface Section {
   id: string;
   title: string;
+  icon: React.ElementType;
 }
 
 const sections: Section[] = [
-  { id: 'guide', title: '快速入门指引' },
-  { id: 'features', title: '功能模块详解' },
-  { id: 'logic', title: '产能负荷计算逻辑' },
-  { id: 'faq', title: '常见问题解决方案 (FAQ)' },
+  { id: 'guide', title: '快速入门指引', icon: Zap },
+  { id: 'features', title: '功能模块详解', icon: LayoutGrid },
+  { id: 'logic', title: '产能负荷计算逻辑', icon: Workflow },
+  { id: 'faq', title: '常见问题解决方案 (FAQ)', icon: HelpCircle },
 ];
 
 export default function UserManual() {
@@ -280,40 +281,39 @@ export default function UserManual() {
       </div>
 
       {/* Floating Navigator */}
-      <div className="hidden xl:block w-64 shrink-0">
+      <div className="hidden xl:block w-56 shrink-0">
         <div className="sticky top-32 space-y-8">
-          <div className="space-y-1 relative">
-            {/* Vertical Line Background */}
-            <div className="absolute left-[17px] top-0 bottom-0 w-px bg-slate-100" />
-            
+          <div className="space-y-4 relative">
             {sections.map((section) => {
               const isActive = activeSection === section.id;
+              const Icon = section.icon;
               return (
                 <button
                   key={section.id}
                   onClick={() => scrollToSection(section.id)}
-                  className="w-full group flex items-center gap-4 py-3 pl-4 text-left transition-all relative"
+                  className="w-full group flex items-center gap-4 py-1.5 text-left transition-all relative"
                 >
-                  {/* Decorative Line */}
-                  <div className={cn(
-                    "w-1 h-5 rounded-full transition-all duration-300 z-10",
-                    isActive ? "bg-blue-600 h-8" : "bg-slate-200 group-hover:bg-slate-400"
-                  )} />
+                  {/* Indicator */}
+                  <div className="w-8 flex justify-start shrink-0">
+                    <div className={cn(
+                      "transition-all duration-300 rounded-full",
+                      isActive ? "w-5 h-1 bg-blue-600" : "w-2.5 h-1 bg-slate-200 group-hover:bg-slate-300"
+                    )} />
+                  </div>
                   
-                  <span className={cn(
-                    "text-sm transition-all duration-300",
-                    isActive ? "text-blue-600 font-bold translate-x-1" : "text-slate-400 group-hover:text-slate-600"
+                  {/* Icon & Text */}
+                  <div className={cn(
+                    "flex items-center gap-3 transition-all duration-300",
+                    isActive ? "text-blue-600" : "text-slate-400 group-hover:text-slate-500"
                   )}>
-                    {section.title}
-                  </span>
-
-                  {isActive && (
-                    <motion.div 
-                      layoutId="active-indicator"
-                      className="absolute left-0 right-0 h-full bg-blue-50/50 rounded-r-xl -z-0"
-                      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                    />
-                  )}
+                    <Icon size={18} className={cn(isActive ? "stroke-[2.5px]" : "stroke-[1.5px]")} />
+                    <span className={cn(
+                      "text-sm transition-all duration-300",
+                      isActive ? "font-bold" : "font-medium"
+                    )}>
+                      {section.title}
+                    </span>
+                  </div>
                 </button>
               );
             })}
