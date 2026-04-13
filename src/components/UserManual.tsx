@@ -13,7 +13,8 @@ import {
   LayoutGrid,
   ClipboardList,
   ChevronDown,
-  AlertCircle
+  AlertCircle,
+  Workflow
 } from 'lucide-react';
 import { cn } from '../utils';
 
@@ -26,7 +27,7 @@ const sections: Section[] = [
   { id: 'guide', title: '快速入门指引' },
   { id: 'features', title: '功能模块详解' },
   { id: 'logic', title: '产能负荷计算逻辑' },
-  { id: 'faq', title: '常见问题解决方案' },
+  { id: 'faq', title: '常见问题解决方案 (FAQ)' },
 ];
 
 export default function UserManual() {
@@ -161,7 +162,7 @@ export default function UserManual() {
             <div className="flex-1 h-px bg-slate-200" />
             <div className="flex items-center gap-3 shrink-0">
               <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-lg shadow-emerald-200">
-                <Settings size={20} />
+                <Workflow size={20} />
               </div>
               <h2 className="text-xl font-bold text-slate-900 tracking-tight">产能负荷计算逻辑</h2>
             </div>
@@ -180,12 +181,12 @@ export default function UserManual() {
               <tbody>
                 <tr>
                   <td className="px-8 py-6 border-b border-slate-100">
-                    <div className="font-bold text-slate-900">模式 A：按开始生产日期</div>
+                    <div className="font-bold text-slate-900">模式A：按开始生产日期</div>
                     <div className="text-[10px] text-emerald-600 font-bold uppercase mt-1">Start Date Mode</div>
                   </td>
                   <td className="px-8 py-6 text-sm text-slate-600 leading-relaxed border-b border-slate-100">
-                    负荷 = 交货日期 - 工序周期。<br/>
-                    将负荷统计在工序预计**开始**的月份。
+                    将负荷统计在工序预计“开始生产日期”的月份。<br/>
+                    开始生产日期 = 交货日期 - 工序周期
                   </td>
                   <td className="px-8 py-6 text-sm text-slate-500 border-b border-slate-100">
                     适用于精细化排产，关注资源占用时间。
@@ -193,11 +194,11 @@ export default function UserManual() {
                 </tr>
                 <tr>
                   <td className="px-8 py-6">
-                    <div className="font-bold text-slate-900">模式 B：按交货日期</div>
+                    <div className="font-bold text-slate-900">模式B：按交货日期</div>
                     <div className="text-[10px] text-blue-600 font-bold uppercase mt-1">Due Date Mode</div>
                   </td>
                   <td className="px-8 py-6 text-sm text-slate-600 leading-relaxed">
-                    直接将负荷统计在订单**交货**所属的月份。
+                    直接将负荷统计在订单“交货日期”所属的月份。
                   </td>
                   <td className="px-8 py-6 text-sm text-slate-500">
                     适用于宏观产能评估，关注交付压力。
@@ -214,7 +215,7 @@ export default function UserManual() {
               <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-lg shadow-slate-200">
                 <HelpCircle size={20} />
               </div>
-              <h2 className="text-xl font-bold text-slate-900 tracking-tight">常见问题解决方案</h2>
+              <h2 className="text-xl font-bold text-slate-900 tracking-tight">常见问题解决方案 (FAQ)</h2>
             </div>
             <div className="flex-1 h-px bg-slate-200" />
           </div>
