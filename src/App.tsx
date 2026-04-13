@@ -39,7 +39,8 @@ import {
   BarChart3,
   CheckCircle2,
   AlertTriangle,
-  Info
+  Info,
+  BookOpen
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn, sortTeams, DEFAULT_TEAM_ORDER, DEFAULT_TEAM_ORDER_VERSION } from './utils';
@@ -49,9 +50,10 @@ import Combobox from './components/Combobox';
 import { DraggableTeamList } from './components/DraggableTeamList';
 import ProductionCalendar from './components/ProductionCalendar';
 import ExceptionMonitoring from './components/ExceptionMonitoring';
+import UserManual from './components/UserManual';
 import { ProductionDemand, ProductionResource, StandardTime, ProcessCycle, AnalysisResult, SystemSettings, MonthlyTeamAnalysis } from './types';
 
-type Tab = 'analysis' | 'demand' | 'resources' | 'standard-time' | 'process-cycle' | 'calendar' | 'settings' | 'exceptions';
+type Tab = 'analysis' | 'demand' | 'resources' | 'standard-time' | 'process-cycle' | 'calendar' | 'settings' | 'exceptions' | 'manual';
 
 interface SystemMessage {
   id: string;
@@ -2044,6 +2046,8 @@ export default function App() {
         return <ProductionCalendar settings={settings} onSettingsChange={setSettings} />;
       case 'exceptions':
         return <ExceptionMonitoring analysisResult={analysisResult} />;
+      case 'manual':
+        return <UserManual />;
       case 'settings':
         if (!tempSettings) return <div className="flex items-center justify-center h-64 text-slate-400">正在加载设置...</div>;
         
@@ -2445,7 +2449,33 @@ export default function App() {
             ))}
           </nav>
           
-          <div className="p-3 border-t border-slate-100">
+          <div className="p-3 border-t border-slate-100 space-y-1">
+            <button
+              onClick={() => setActiveTab('manual')}
+              className={cn(
+                "w-full flex items-center px-4 py-3 rounded-xl transition-all duration-200 group",
+                activeTab === 'manual' 
+                  ? "bg-blue-50 text-blue-600" 
+                  : "text-slate-500 hover:bg-slate-50 hover:text-slate-900",
+                !isSidebarOpen && "justify-center px-0"
+              )}
+            >
+              <div className={cn("flex items-center gap-3", !isSidebarOpen && "gap-0")}>
+                <BookOpen size={20} className="shrink-0" />
+                <AnimatePresence>
+                  {isSidebarOpen && (
+                    <motion.span 
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -10 }}
+                      className="text-sm font-medium whitespace-nowrap"
+                    >
+                      用户手册
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </div>
+            </button>
             <button
               onClick={() => setActiveTab('settings')}
               className={cn(
