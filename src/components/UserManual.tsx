@@ -14,7 +14,12 @@ import {
   ClipboardList,
   ChevronDown,
   AlertCircle,
-  Workflow
+  Workflow,
+  Maximize2,
+  ZoomIn,
+  ZoomOut,
+  X,
+  Search
 } from 'lucide-react';
 import { cn } from '../utils';
 
@@ -30,6 +35,100 @@ const sections: Section[] = [
   { id: 'logic', title: '产能负荷计算逻辑', icon: Workflow },
   { id: 'faq', title: '常见问题解决方案 (FAQ)', icon: HelpCircle },
 ];
+
+function ZoomableImage({ src, alt }: { src: string; alt: string }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalScale, setModalScale] = useState(0.6);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const handleWheel = (e: React.WheelEvent) => {
+    if (isModalOpen) {
+      e.preventDefault();
+      const delta = e.deltaY > 0 ? -0.1 : 0.1;
+      setModalScale(prev => Math.min(Math.max(prev + delta, 0.5), 3));
+    }
+  };
+
+  return (
+    <>
+      <div 
+        ref={containerRef}
+        className="relative mt-6 rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 group cursor-zoom-in"
+        onClick={() => setIsModalOpen(true)}
+      >
+        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors z-10 flex items-center justify-center">
+          <div className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 p-3 rounded-full shadow-xl">
+            <Search size={20} className="text-slate-600" />
+          </div>
+        </div>
+        <motion.img
+          src={src}
+          alt={alt}
+          referrerPolicy="no-referrer"
+          className="w-full h-auto origin-center transition-transform duration-200"
+        />
+      </div>
+
+      <AnimatePresence>
+        {isModalOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] bg-slate-900/90 backdrop-blur-md flex items-center justify-center p-8"
+            onClick={() => setIsModalOpen(false)}
+          >
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="relative max-w-7xl max-h-full overflow-hidden rounded-3xl shadow-2xl bg-white"
+              onClick={(e) => e.stopPropagation()}
+              onWheel={handleWheel}
+            >
+              <div className="absolute top-6 right-6 z-[110] flex gap-3">
+                <div className="flex items-center bg-white/90 backdrop-blur shadow-lg rounded-xl border border-slate-100 overflow-hidden">
+                  <button 
+                    onClick={() => setModalScale(prev => Math.max(prev - 0.2, 0.5))}
+                    className="p-3 hover:bg-slate-100 text-slate-600 transition-colors"
+                  >
+                    <ZoomOut size={20} />
+                  </button>
+                  <div className="px-3 text-sm font-bold text-slate-400 border-x border-slate-100 min-w-[60px] text-center">
+                    {Math.round(modalScale * 100)}%
+                  </div>
+                  <button 
+                    onClick={() => setModalScale(prev => Math.min(prev + 0.2, 3))}
+                    className="p-3 hover:bg-slate-100 text-slate-600 transition-colors"
+                  >
+                    <ZoomIn size={20} />
+                  </button>
+                </div>
+                <button 
+                  onClick={() => setIsModalOpen(false)}
+                  className="p-3 bg-white/90 backdrop-blur shadow-lg rounded-xl border border-slate-100 text-slate-600 hover:bg-red-50 hover:text-red-600 transition-all"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              <div className="overflow-auto max-h-[85vh] p-4 flex items-center justify-center bg-slate-50">
+                <motion.img
+                  src={src}
+                  alt={alt}
+                  referrerPolicy="no-referrer"
+                  className="max-w-none transition-transform duration-200 shadow-lg rounded-lg"
+                  style={{ transform: `scale(${modalScale})` }}
+                />
+              </div>
+              
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
 
 export default function UserManual() {
   const [activeSection, setActiveSection] = useState('guide');
@@ -120,38 +219,31 @@ export default function UserManual() {
             <div className="flex-1 h-px bg-slate-200" />
           </div>
 
-          <div className="grid grid-cols-1 gap-6">
+          <div className="grid grid-cols-1 gap-8">
             {[
               { 
                 title: '总览看板 (Analysis)', 
-                icon: BarChart3, 
-                color: 'text-emerald-600', 
-                bg: 'bg-emerald-50',
-                desc: '核心决策中心。展示月度产能负荷率、班组负荷排名及趋势图。支持按年份、月份和班组进行多维过滤。'
+                desc: '核心决策中心。展示月度产能负荷率、班组负荷排名及趋势图。支持按年份、月份和班组进行多维过滤。',
+                image: '/public/demo-dashboard.png'
               },
               { 
                 title: '生产需求 (Demand)', 
-                icon: ClipboardList, 
-                color: 'text-blue-600', 
-                bg: 'bg-blue-50',
-                desc: '管理待生产订单。包含订单号、工序、交货日期及需求数量。是产能计算的“需求端”来源。'
+                desc: '管理待生产订单。包含订单号、工序、交货日期及需求数量。是产能计算的“需求端”来源。',
+                image: '/public/demo-demand.png'
               },
               { 
                 title: '资源与工时 (Resources & Time)', 
-                icon: Settings, 
-                color: 'text-amber-600', 
-                bg: 'bg-amber-50',
-                desc: '定义生产能力。配置各班组的人员、机器数量及其对应的 OEE（综合设备效率）。'
+                desc: '定义生产能力。配置各班组的人员、机器数量及其对应的 OEE（综合设备效率）。',
+                image: 'https://picsum.photos/seed/resources/1200/800'
               }
             ].map((feature, idx) => (
-              <div key={idx} className="flex gap-6 p-8 rounded-3xl bg-white border border-slate-100 shadow-sm">
-                <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center shrink-0", feature.bg, feature.color)}>
-                  <feature.icon size={28} />
-                </div>
-                <div className="space-y-2">
-                  <h3 className="text-lg font-bold text-slate-900">{feature.title}</h3>
+              <div key={idx} className="p-8 rounded-3xl bg-white border border-slate-100 shadow-sm">
+                <div className="mb-6">
+                  <h3 className="text-lg font-bold text-slate-900 mb-2">{feature.title}</h3>
                   <p className="text-slate-500 leading-relaxed">{feature.desc}</p>
                 </div>
+                
+                <ZoomableImage src={feature.image} alt={feature.title} />
               </div>
             ))}
           </div>
