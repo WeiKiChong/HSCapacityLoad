@@ -189,9 +189,9 @@ export default function UserManual() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { step: '01', title: '数据准备', desc: '准备生产需求、资源分组及标准工时等基础 Excel 数据。' },
-              { step: '02', title: '数据导入', desc: '在对应模块点击“导入”按钮，上传准备好的 Excel 文件。' },
-              { step: '03', title: '产能分析', desc: '进入总览看板，系统将自动根据导入数据生成负荷分析。' },
+              { step: '01', title: '数据准备', desc: '（1）生产需求\n（2）资源分组\n（3）标准工时\n（4）工序周期' },
+              { step: '02', title: '数据导入', desc: '在对应模块点击“导入”按钮，上传准备好的 Excel/CSV 文件。' },
+              { step: '03', title: '产能分析', desc: '进入总览看板，系统将自动根据导入数据生成产能负荷分析。' },
             ].map((item, idx) => (
               <div key={idx} className="relative p-6 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-md transition-shadow group">
                 <div className="text-4xl font-black text-slate-100 absolute top-4 right-6 group-hover:text-blue-50 transition-colors">
@@ -199,7 +199,7 @@ export default function UserManual() {
                 </div>
                 <div className="relative space-y-3">
                   <h3 className="font-bold text-slate-900">{item.title}</h3>
-                  <p className="text-sm text-slate-500 leading-relaxed">{item.desc}</p>
+                  <p className="text-sm text-slate-500 leading-relaxed whitespace-pre-line">{item.desc}</p>
                 </div>
               </div>
             ))}
@@ -222,8 +222,8 @@ export default function UserManual() {
           <div className="grid grid-cols-1 gap-8">
             {[
               { 
-                title: '总览看板 (Analysis)', 
-                desc: '核心决策中心。展示月度产能负荷率、班组负荷排名及趋势图。支持按年份、月份和班组进行多维过滤。',
+                title: '总览看板 (Dashboard)', 
+                desc: '展示月度产能负荷率、班组负荷排名及趋势图。支持按年份、月份和班组进行多维过滤。',
                 image: '/public/demo-dashboard.png'
               },
               { 
@@ -232,9 +232,9 @@ export default function UserManual() {
                 image: '/public/demo-demand.png'
               },
               { 
-                title: '资源与工时 (Resources & Time)', 
-                desc: '定义生产能力。配置各班组的人员、机器数量及其对应的 OEE（综合设备效率）。',
-                image: 'https://picsum.photos/seed/resources/1200/800'
+                title: '开发中...', 
+                desc: '',
+                image: ''
               }
             ].map((feature, idx) => (
               <div key={idx} className="p-8 rounded-3xl bg-white border border-slate-100 shadow-sm">
@@ -321,7 +321,7 @@ export default function UserManual() {
             {[
               { 
                 q: '导入数据时提示“验证失败”怎么办？', 
-                a: '请检查导入的Excel/CSV文件，确保表头名称与系统要求一致，且文件内容不为空。系统需要识别特定的关键词（如“工单号”、“资源组ID”、“班组”等）。' 
+                a: '请检查导入的 Excel/CSV 文件，确保表头名称与系统要求一致，且文件内容不为空。系统需要识别特定的关键词（如“工单号”、“资源组ID”、“班组”等）。' 
               },
               { 
                 q: '异常监控里出现了“未匹配数据”，如何处理？', 
