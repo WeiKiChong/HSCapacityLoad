@@ -41,6 +41,8 @@ function ZoomableImage({ src, alt }: { src: string; alt: string }) {
   const [modalScale, setModalScale] = useState(0.6);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  if (!src) return null;
+
   const handleWheel = (e: React.WheelEvent) => {
     if (isModalOpen) {
       e.preventDefault();
