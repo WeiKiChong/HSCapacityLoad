@@ -262,13 +262,17 @@ export default function UserManual() {
             <div className="flex-1 h-px bg-slate-200" />
           </div>
 
+          <p className="text-slate-600 text-sm leading-relaxed">
+            本系统支持两种不同的产能负荷计算逻辑，您可以在“系统设置”中进行选择。
+          </p>
+
           <div className="glass-card overflow-hidden border border-slate-100">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-slate-50/50">
-                  <th className="px-8 py-5 text-sm font-bold text-slate-900 border-b border-slate-100">计算模式</th>
+                  <th className="w-[240px] px-8 py-5 text-sm font-bold text-slate-900 border-b border-slate-100">计算模式</th>
                   <th className="px-8 py-5 text-sm font-bold text-slate-900 border-b border-slate-100">核心逻辑</th>
-                  <th className="px-8 py-5 text-sm font-bold text-slate-900 border-b border-slate-100">适用场景</th>
+                  <th className="w-[310px] px-8 py-5 text-sm font-bold text-slate-900 border-b border-slate-100">适用场景</th>
                 </tr>
               </thead>
               <tbody>
@@ -278,8 +282,8 @@ export default function UserManual() {
                     <div className="text-[10px] text-emerald-600 font-bold uppercase mt-1">Start Date Mode</div>
                   </td>
                   <td className="px-8 py-6 text-sm text-slate-600 leading-relaxed border-b border-slate-100">
-                    将负荷统计在工序预计“开始生产日期”的月份。<br/>
-                    开始生产日期 = 交货日期 - 工序周期
+                    通过工单的交货日期结合工序周期进行反向追溯，根据每道工序的“开始生产日期”将需求工时计入对应的月份。<br/>
+                    <span className="font-bold text-slate-900">开始生产日期 = 交货日期 - 工序周期</span>
                   </td>
                   <td className="px-8 py-6 text-sm text-slate-500 border-b border-slate-100">
                     适用于精细化排产，关注资源占用时间。
@@ -291,7 +295,7 @@ export default function UserManual() {
                     <div className="text-[10px] text-blue-600 font-bold uppercase mt-1">Due Date Mode</div>
                   </td>
                   <td className="px-8 py-6 text-sm text-slate-600 leading-relaxed">
-                    直接将负荷统计在订单“交货日期”所属的月份。
+                    不考虑生产过程的长短，将所有需求工时直接计入工单归属的“交货日期”对应的月份。
                   </td>
                   <td className="px-8 py-6 text-sm text-slate-500">
                     适用于宏观产能评估，关注交付压力。
